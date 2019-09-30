@@ -2,26 +2,28 @@
 #include <DNSServer.h>
 #include <WiFiManager.h>
 
+// parameters to get from AP
 char * mqtt_server;
 char * device_name;
 char * room;
 
 void setup_wifi(boolean reset) {
-  setStat(4);
-  // WiFiManager
-  // Local intialization. Once its business is done, there is no need to keep it around  
+  // status led to indicate what happens
+  setStat(4);  
+  
   WiFiManager wifiManager;
 
-  // Uncomment and run it once, if you want to erase all the stored information
+  // to reset the wifiManager and the EEPROM to input new information
   if(reset){
     wifiManager.resetSettings();
-    //clearEEPROMParam();
+    clearEEPROMParam();
   }
+
+  // Adding Parameters to the WifiManager
   char* mqtt_server = (char *)malloc(32);
   if(!readMqttServer(mqtt_server)){
     mqtt_server = "192.168.2.117";
   }
-  
   // id/device_name, placeholder/prompt, default, length
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 32);
   wifiManager.addParameter(&custom_mqtt_server);
@@ -30,7 +32,6 @@ void setup_wifi(boolean reset) {
   if(!readName(device_name)){
     device_name = "mid-led";
   }
-  // id/device_name, placeholder/prompt, default, length
   WiFiManagerParameter custom_device_name("device-device_name", "device_name", device_name, 32);
   wifiManager.addParameter(&custom_device_name);
 
@@ -38,21 +39,13 @@ void setup_wifi(boolean reset) {
   if(!readRoom(room)){
     room = "livingroom";
   }
-  // id/device_name, placeholder/prompt, default, length
   WiFiManagerParameter custom_room("room", "room", room, 32);
   wifiManager.addParameter(&custom_room);
   
-  // set custom ip for portal
-  //wifiManager.setAPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
-
   // fetches ssid and pass from eeprom and tries to connect
-  // if it does not connect it starts an access point with the specified device_name
-  // here  "AutoConnectAP"
-  // and goes into a blocking loop awaiting configuration
   wifiManager.autoConnect("mid-led-AP");
-  // or use this for auto generated device_name ESP + ChipID
-  //wifiManager.autoConnect();
- //Input parameters
+  
+  //Input parameters
   char* s_mqtt_server = (char*)malloc(32);
   char* s_device_name = (char*)malloc(32);
   char* s_room = (char*)malloc(32);
@@ -70,7 +63,6 @@ void setup_wifi(boolean reset) {
     writeName(device_name);
     writeRoom(room);
   }
-  Serial.println("after param save");
 
   // if you get here you have connected to the WiFi
   Serial.println("Connected.");

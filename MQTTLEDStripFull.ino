@@ -1,8 +1,4 @@
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-
-WiFiClient espClient;
-
+// var for the status led
 boolean normal = true;
 
 void setup() {
@@ -20,7 +16,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(".");
   if(normal){
     //setStat(0);
   }

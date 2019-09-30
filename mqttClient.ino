@@ -1,4 +1,7 @@
 #include <PubSubClient.h>
+#include <WiFiClient.h>
+
+WiFiClient espClient;
 
 PubSubClient client(espClient);
 int value = 0;
@@ -39,9 +42,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void reconnect() {
+  // status of status led
   setStat(2);
   normal= false;
-  // Loop until we're reconnected
+  // Loop until we're re-/connected
   if (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
@@ -51,11 +55,7 @@ void reconnect() {
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
       normal = true;
-      // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
-      // ... and resubscribe
       client.subscribe("home/livingroom/mid-strip");
-      client.subscribe("outTopic");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

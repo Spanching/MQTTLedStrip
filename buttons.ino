@@ -11,6 +11,8 @@ void setup_buttons(){
   pinMode(BTN_AP, INPUT_PULLUP);
 }
 
+// status button to dis-/enable the status led 
+// AP button to reset WifiManager to input new credentials
 void loop_buttons(){
   btn_status = !digitalRead(BTN_STATUS);
   btn_ap = !digitalRead(BTN_AP);

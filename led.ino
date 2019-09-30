@@ -1,7 +1,8 @@
 #include "LEDconfig.h"
 #include <FastLED.h>
 
-//LED shit
+// ugly in here, still work to do
+
 int led_state = 0;
 
 CRGBPalette16 currentPalette;

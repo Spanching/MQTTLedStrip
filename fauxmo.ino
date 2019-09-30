@@ -7,8 +7,8 @@ fauxmoESP fauxmo;
 char* char_names[COLOR_COUNT];
 
 void setup_fauxmo(){
-    fauxmo.createServer(true); // not needed, this is the default value
-    fauxmo.setPort(80); // This is required for gen3 devices
+    fauxmo.createServer(true);  // not needed, this is the default value
+    fauxmo.setPort(80);         // This is required for gen3 devices
     
     String names[COLOR_COUNT] = {name, name+" in grün", name+" in rot", name+" in blau", name+" in gelb", name+" in Regenbogen"};
     
@@ -42,7 +42,5 @@ void setup_fauxmo(){
     });
 }
 void loop_fauxmo(){
-    // fauxmoESP uses an async TCP server but a sync UDP server
-    // Therefore, we have to manually poll for UDP packets
     fauxmo.handle();
 }

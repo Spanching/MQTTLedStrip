@@ -1,6 +1,4 @@
-// Physical device information for board and sensor
-
-//LED defines
+//LED information
 #define LED_PIN     D4
 #define NUM_LEDS    60
 #define BRIGHTNESS  40
