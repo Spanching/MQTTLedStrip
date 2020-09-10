@@ -1,5 +1,6 @@
 #include <PubSubClient.h>
 #include <WiFiClient.h>
+#include "config.h"
 
 WiFiClient espClient;
 
@@ -8,9 +9,11 @@ int value = 0;
 
 
 
-char* topic_brightness = "home/bed/led/brightness";
+char* topic_brightness = "home/bedroom/led/brightness";
 char* topic_power = "home/bedroom/led/power";
-char* topic_color = "home/bedroom/led/color";
+char* topic_color = "home/bedroom/led/color/rgb";
+char* topic_color_hsv = "home/bedroom/led/color/hsv";
+char* topic_color_temperature = "home/bedroom/led/color/temp";
 
 char* username = MQTT_USER;
 char* password = MQTT_PASSWORD;
@@ -42,7 +45,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
   if (strcmp(topic, topic_brightness)==0){
-    setBrightness(str_payload.toInt());
+    setLEDBrightness(str_payload.toInt());
   }
   if (strcmp(topic, topic_power)==0){
     if(str_payload == "0") {
@@ -52,7 +55,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
   }
   if (strcmp(topic, topic_color)==0){
-    setColor(str_payload);
+    setLEDColor(str_payload);
+  }
+  if (strcmp(topic, topic_color_hsv)==0){
+    setLEDColorHSV(str_payload);
+  }
+  if (strcmp(topic, topic_color_temperature)==0){
+    setLEDColorTemperature(str_payload.toInt());
   }
 
   char* tmp = (char*)malloc(length+1);
@@ -85,6 +94,7 @@ void reconnect() {
       client.subscribe(topic_brightness);
       client.subscribe(topic_power);
       client.subscribe(topic_color);
+      client.subscribe(topic_color_hsv);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
