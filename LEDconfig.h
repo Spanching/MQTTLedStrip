@@ -1,5 +1,5 @@
 //LED information
-#define LED_PIN     D4
+#define LED_PIN     D1
 #define NUM_LEDS    60
 #define BRIGHTNESS  40
 #define LED_TYPE    WS2811
