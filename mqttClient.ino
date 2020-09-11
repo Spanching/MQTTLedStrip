@@ -34,6 +34,10 @@ void loop_mqtt(){
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
+  char* tmp = (char*)malloc(length+1);
+  char* back_topic = (char*)malloc(200);
+  memset(back_topic, '\0', 200);
+  strcpy(back_topic, topic);
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -64,10 +68,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     setLEDColorTemperature(str_payload.toInt());
   }
 
-  char* tmp = (char*)malloc(length+1);
-  char* back_topic = (char*)malloc(200);
-  memset(back_topic, '\0', 200);
-  strcpy(back_topic, topic);
   strcat(back_topic, "/back");
   Serial.println(back_topic);
   str_payload.toCharArray(tmp, length+1);
@@ -78,7 +78,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void reconnect() {
   // ledstatus of status led
-  setStat(2);
+  //setStat(2);
   normal= false;
 
   // Loop until we're re-/connected
@@ -95,6 +95,7 @@ void reconnect() {
       client.subscribe(topic_power);
       client.subscribe(topic_color);
       client.subscribe(topic_color_hsv);
+      client.subscribe(topic_color_temperature);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

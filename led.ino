@@ -14,7 +14,7 @@ FASTLED_USING_NAMESPACE
 #define TEMPERATURE_8 OvercastSky
 #define TEMPERATURE_9 ClearBlueSky
 
-int led_state = 0;
+int led_state = 1;
 
 boolean already_on = false;
 
@@ -23,6 +23,7 @@ CHSVPalette16 currentPalette_HSV;
 TBlendType    currentBlending;
 
 CRGB leds[NUM_LEDS];
+CRGB correction = CRGB(255, 176, 240);
 
 void setup_leds(){
   pinMode(LED_PIN, OUTPUT);
@@ -32,11 +33,14 @@ void setup_leds(){
   FastLED.setBrightness( BRIGHTNESS );
 
   currentBlending = LINEARBLEND;
-  fill_solid( leds, NUM_LEDS, CRGB::Black);
+  fill_solid( leds, NUM_LEDS, CRGB::White);
 }
 
-void loop_led(){    
-  FastLED.show();
+void loop_led(){
+  if (led_state == 0) {
+    fill_solid( leds, NUM_LEDS, CRGB::Black);
+    FastLED.show();
+  }
   FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
 
@@ -51,6 +55,7 @@ void setLEDColor(String rgb_hex){
     int b = number & 0xFF;  
     
     fill_solid(leds, NUM_LEDS, CRGB(r,g,b));
+  FastLED.show();
 }
 
 void setLEDColorHSV(String hsv_hex) {
@@ -66,6 +71,7 @@ void setLEDColorHSV(String hsv_hex) {
   hsv2rgb_rainbow(color, rgb);
   // use FastLED to set the color of all LEDs in the strip to the same color
   fill_solid(leds, NUM_LEDS, rgb);
+  FastLED.show();
   //hsv = true;
 }
 
@@ -73,30 +79,22 @@ void setLEDPower(boolean on){
   if (on && !already_on) {
     already_on = true;
     fill_solid( leds, NUM_LEDS, CRGB::White);
-  } else {
+    led_state = 1;
+  } 
+  if (!on) {
     already_on = false;
+    led_state = 0;
     fill_solid( leds, NUM_LEDS, CRGB::Black);
   }
+  FastLED.show();
 }
 
-void setLEDColorTemperature(int kelvin) {
-  if (kelvin < 2250) {
+void setLEDColorTemperature(int ct) {
+  //from 153 to 500
+  if (ct == 0) {
     FastLED.setTemperature(TEMPERATURE_1);
-  } else if (kelvin < 2725) {
-    FastLED.setTemperature(TEMPERATURE_2);
-  } else if (kelvin < 3025) {
-    FastLED.setTemperature(TEMPERATURE_3);
-  } else if (kelvin < 4200) {
-    FastLED.setTemperature(TEMPERATURE_4);
-  } else if (kelvin < 5300) {
-    FastLED.setTemperature(TEMPERATURE_5);
-  } else if (kelvin < 5700) {
-    FastLED.setTemperature(TEMPERATURE_6);
-  } else if (kelvin < 6500) {
-    FastLED.setTemperature(TEMPERATURE_7);
-  } else if (kelvin < 13500) {
-    FastLED.setTemperature(TEMPERATURE_8);
-  } else {
+  }else
+  if (ct == 1) {
     FastLED.setTemperature(TEMPERATURE_9);
   }
 }
