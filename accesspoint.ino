@@ -2,10 +2,6 @@
 #include <DNSServer.h>
 #include <WiFiManager.h>
 
-// parameters to get from AP
-char * mqtt_server;
-char * device_name;
-char * room;
 
 void setup_wifi(boolean reset) {  
   WiFiManager wifiManager;
@@ -16,7 +12,7 @@ void setup_wifi(boolean reset) {
   }
   
   // fetches ssid and pass from eeprom and tries to connect
-  wifiManager.autoConnect("Bedroom-LED-AP");
+  wifiManager.autoConnect("Bedroom-LED-AP", "accesspoint");
 
   // if you get here you have connected to the WiFi
   Serial.println("Connected.");

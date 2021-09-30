@@ -14,6 +14,7 @@ char* topic_power = "home/bedroom/led/power";
 char* topic_color = "home/bedroom/led/color/rgb";
 char* topic_color_hsv = "home/bedroom/led/color/hsv";
 char* topic_color_temperature = "home/bedroom/led/color/temp";
+char* topic_waves = "home/bedroom/led/waves";
 
 char* username = MQTT_USER;
 char* password = MQTT_PASSWORD;
@@ -67,6 +68,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (strcmp(topic, topic_color_temperature)==0){
     setLEDColorTemperature(str_payload.toInt());
   }
+  if (strcmp(topic, topic_waves)==0){
+    setLEDWaves(str_payload.toInt() == 0);
+  }
 
   strcat(back_topic, "/back");
   Serial.println(back_topic);
@@ -77,10 +81,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void reconnect() {
-  // ledstatus of status led
-  //setStat(2);
-  normal= false;
-
   // Loop until we're re-/connected
   if (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -90,12 +90,12 @@ void reconnect() {
     // Attempt to connect
     if (client.connect(clientId.c_str(), username, password)) {
       Serial.println("connected");
-      normal = true;
       client.subscribe(topic_brightness);
       client.subscribe(topic_power);
       client.subscribe(topic_color);
       client.subscribe(topic_color_hsv);
       client.subscribe(topic_color_temperature);
+      client.subscribe(topic_waves);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
