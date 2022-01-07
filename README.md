@@ -1,5 +1,11 @@
 # MQTTLedStrip
-LED strip controlled with a WEMOS D1 mini
+
+## Disclaimer
+
+I am glad you are interested in my project. But I realized, if I wanted effects and all the good stuff, this project would take me a lot of work. Fortunately someone else invests his time in exactly that. 
+So for me I decided to use [WLED](https://github.com/Aircoookie/WLED) instead of programming my own controller. 
+
+Feel free to browse the code and use whatever you may need, but keep in mind all of this will not be updated anymore.
 
 ### MQTT Client
 This LED strip is controlled by an App (coming soon on github), that sends http requests to a python server running on my raspberry pi. 

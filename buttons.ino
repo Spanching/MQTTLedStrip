@@ -1,34 +1,36 @@
-#define BTN_STATUS D7
-#define BTN_AP D8
+#define BTN_STATUS D6
+#define BTN_AP D5
 
-int btn_status = 0;
+int btn_ledstatus = 0;
 int btn_ap = 0;
 
-int status_change=0;
+int ledstatus_change=0;
+
+void toggleEnabled();
 
 void setup_buttons(){
   pinMode(BTN_STATUS, INPUT_PULLUP);
   pinMode(BTN_AP, INPUT_PULLUP);
 }
 
-// status button to dis-/enable the status led 
+// ledstatus button to dis-/enable the ledstatus led 
 // AP button to reset WifiManager to input new credentials
 void loop_buttons(){
-  btn_status = !digitalRead(BTN_STATUS);
+  btn_ledstatus = !digitalRead(BTN_STATUS);
   btn_ap = !digitalRead(BTN_AP);
-  if(btn_status){
-    btn_status_pressed();
+  if(btn_ledstatus){
+    btn_ledstatus_pressed();
   }else{
-    status_change = 0;
+    ledstatus_change = 0;
   }
   if(btn_ap){
     setup_wifi(true);
   }
 }
 
-void btn_status_pressed(){
-  if(status_change==0){
+void btn_ledstatus_pressed(){
+  if(ledstatus_change==0){
     toggleEnabled();
-    status_change = 1;
+    ledstatus_change = 1;
   }
 }
