@@ -8,6 +8,7 @@ PubSubClient client(espClient);
 int value = 0;
 
 
+char* base_topic = "home/bedroom/led/";
 
 char* topic_brightness = "home/bedroom/led/brightness";
 char* topic_power = "home/bedroom/led/power";
@@ -18,9 +19,9 @@ char* topic_waves = "home/bedroom/led/waves";
 
 char* username = MQTT_USER;
 char* password = MQTT_PASSWORD;
+char* server = MQTT_SERVER;
 
 void setup_mqtt(){
-  char * server = "192.168.0.20";
   client.setServer(server, 1883);
   client.setCallback(callback);
   Serial.print("Setup Mqtt with server");
